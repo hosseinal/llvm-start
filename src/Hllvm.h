@@ -10,6 +10,8 @@
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Verifier.h>
 
+#include <parser/EvaGrammer.h>
+
 #include <memory>
 #include <string>
 
@@ -18,6 +20,7 @@ class Hllvm {
 public:
     Hllvm(){
         moduleInitialize();
+        setupExternalFunctions();
     }
 
     void execute(const std::string& code){
@@ -49,6 +52,12 @@ void saveModuleToFile(const std::string& filename){
 }
 
 
+void setupExternalFunctions(){
+    auto printf_type = llvm::FunctionType::get(
+        builder->getInt32Ty(), builder->getInt8PtrTy(), true);
+    module->getOrInsertFunction("printf", printf_type);
+}
+
 void compile(){
     //create main function
     fn = createFunction("main",
@@ -60,17 +69,21 @@ void compile(){
     auto result = gen(/*ast*/);
 
     // cast to i32 return from main function
-    auto i32_return = builder->CreateIntCast(result, builder->getInt32Ty(), true);
+    // auto i32_return = builder->CreateIntCast(result, builder->getInt32Ty(), true);
 
     // return the result
-    builder->CreateRet(i32_return);
+    builder->CreateRet(builder->getInt32(0));
 } 
 
 
 
 
 llvm::Value* gen(/*ast*/){
-    return builder->getInt32(42);
+    auto result = builder->CreateGlobalStringPtr("Hello, World!\n");
+
+    auto printf_fn = module->getFunction("printf");
+    std::vector<llvm::Value*> args = {result};
+    return builder->CreateCall(printf_fn, args);
 }
 
 llvm::Function* createFunction(const std::string& name, llvm::FunctionType* type){

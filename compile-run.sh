@@ -2,7 +2,7 @@ clang++ -o program `llvm-config --cxxflags --ldflags --system-libs --libs core` 
 
 ./program
 
-"$(llvm-config --bindir)/lli" output.ll
+# "$(llvm-config --bindir)/lli" output.ll
 
 lli output.ll
 
