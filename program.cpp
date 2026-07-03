@@ -6,7 +6,7 @@
 int main(){
     Hllvm hllvm;
 
-    std::string code = "print('Hello, World!');";
+    std::string code = "42";
     
     hllvm.execute(code);
     
