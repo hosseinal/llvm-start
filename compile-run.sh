@@ -1,4 +1,4 @@
-clang++ -o program `llvm-config --cxxflags --ldflags --system-libs --libs core` program.cpp
+clang++ -o program $(llvm-config --cxxflags --ldflags --system-libs --libs core) -fexceptions program.cpp
 
 ./program
 

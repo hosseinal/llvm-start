@@ -11,7 +11,7 @@
  *
  *   syntax-cli \
  *     --grammar ~/path-to-grammar-file \
- *     --mode <parsing-mode> \
+ *     --mode <parsing-mode> \F
  *     --output ~/ParserClassName.h
  */
 #ifndef __Syntax_LR_Parser_h
@@ -354,7 +354,7 @@ class Tokenizer {
    * Lexical rules.
    */
   // clang-format off
-  static constexpr size_t LEX_RULES_COUNT = 10;
+  static constexpr size_t LEX_RULES_COUNT = 8;
   static std::array<LexRule, LEX_RULES_COUNT> lexRules_;
   static std::map<TokenizerState, std::vector<size_t>> lexRulesByStartConditions_;
   // clang-format on
@@ -434,14 +434,6 @@ return TokenType::STRING;
 inline TokenType _lexRule8(const Tokenizer& tokenizer, const std::string& yytext) {
 return TokenType::SYMBOL;
 }
-
-inline TokenType _lexRule9(const Tokenizer& tokenizer, const std::string& yytext) {
-return TokenType::(;
-}
-
-inline TokenType _lexRule10(const Tokenizer& tokenizer, const std::string& yytext) {
-return TokenType::);
-}
 // clang-format on
 
 // ------------------------------------------------------------------
@@ -456,11 +448,9 @@ std::array<LexRule, Tokenizer::LEX_RULES_COUNT> Tokenizer::lexRules_ = {{
   {std::regex(R"(^\s+)"), &_lexRule5},
   {std::regex(R"(^\d+)"), &_lexRule6},
   {std::regex(R"(^"[^\"]*")"), &_lexRule7},
-  {std::regex(R"(^[\w\-+*=!<>/]+)"), &_lexRule8},
-  {std::regex(R"(^\()"), &_lexRule9},
-  {std::regex(R"(^\))"), &_lexRule10}
+  {std::regex(R"(^[\w\-+*=!<>/]+)"), &_lexRule8}
 }};
-std::map<TokenizerState, std::vector<size_t>> Tokenizer::lexRulesByStartConditions_ =  {{TokenizerState::INITIAL, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}}};
+std::map<TokenizerState, std::vector<size_t>> Tokenizer::lexRulesByStartConditions_ =  {{TokenizerState::INITIAL, {0, 1, 2, 3, 4, 5, 6, 7}}};
 // clang-format on
 
 #endif
